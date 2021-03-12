@@ -10,4 +10,14 @@
 
 ```
 
-This repo contains the CorDapp code in Kotlin.
+This repo contains the CorDapp code in Kotlin for a migration issue
+
+
+# How to reproduce
+
+- Clone repository
+- Run the following:
+
+```
+./gradlew runNodes
+```
