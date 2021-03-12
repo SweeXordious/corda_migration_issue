@@ -1,0 +1,5 @@
+rootProject.name = 'dummy-cordapp'
+
+include 'workflows'
+include 'contracts'
+include 'webserver'

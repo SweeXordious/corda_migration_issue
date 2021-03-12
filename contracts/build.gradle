@@ -1,0 +1,56 @@
+apply plugin: 'net.corda.plugins.cordapp'
+apply plugin: 'kotlin-jpa'
+
+ext {
+    signKeyStore = System.getenv("CI_SIGN_KEYSTORE") ?: getProperty("sign.keystore")
+    signAlias = System.getenv("CI_SIGN_ALIAS") ?: getProperty("sign.alias")
+    signStorePass = System.getenv("CI_SIGN_STOREPASS") ?: getProperty("sign.storepass")
+    signKeyPass = System.getenv("CI_SIGN_KEYPASS") ?: getProperty("sign.keypass")
+    signStoreType = System.getenv("CI_SIGN_STORETYPE") ?: getProperty("sign.storetype")
+}
+
+cordapp {
+    targetPlatformVersion corda_platform_version.toInteger()
+    minimumPlatformVersion corda_platform_version.toInteger()
+    contract {
+        name "Dummy CorDapp Contracts"
+        vendor "Dummy"
+        licence "Apache License, Version 2.0"
+        versionId 1
+    }
+
+    signing {
+        enabled true
+        options {
+            keystore = rootDir.toPath().resolve(signKeyStore)
+            alias = signAlias
+            storepass = signStorePass
+            keypass = signKeyPass
+            storetype = signStoreType
+        }
+    }
+}
+
+dependencies {
+    // Corda dependencies
+    cordaCompile "$corda_release_group:corda-core:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-confidential-identities:$corda_release_version"
+
+    // Tokens dependencies
+//    cordapp "$tokens_release_group:tokens-contracts:$tokens_release_version"
+
+    // Hibernate custom mappings
+    cordaCompile "com.vladmihalcea:hibernate-types-52:$hibernate_types_version"
+    
+    testImplementation "$corda_release_group:corda-node-driver:$corda_release_version"
+
+    // Accounts dependencies
+    cordapp "$accounts_release_group:accounts-contracts:$accounts_release_version"
+
+    // Business Network dependencies
+//    cordapp "$corda_bn_release_group:business-networks-contracts:$corda_bn_release_version"
+}
+
+jar {
+    archivesBaseName = "${rootProject.name}-contracts"
+}

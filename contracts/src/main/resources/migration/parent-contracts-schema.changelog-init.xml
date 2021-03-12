@@ -1,0 +1,49 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="dummy.corda" id="create_child_state">
+        <createTable tableName="child_table">
+            <column name="output_index" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_id" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="output_index, transaction_id"
+                       constraintName="pk_child_table"
+                       tableName="child_table"/>
+    </changeSet>
+
+    <changeSet author="dummy.corda" id="create_parent_state" dbms="h2">
+        <createTable tableName="parent_table">
+            <column name="output_index" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_id" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identifier" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="output_index, transaction_id"
+                       constraintName="pk_parent_table"
+                       tableName="parent_table"/>
+        <addForeignKeyConstraint baseTableName="child_table"
+                                 baseColumnNames="output_index, transaction_id"
+                                 constraintName="fk_child_table"
+                                 referencedTableName="parent_table"
+                                 referencedColumnNames="output_index, transaction_id"/>
+    </changeSet>
+
+</databaseChangeLog>
