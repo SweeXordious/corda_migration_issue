@@ -2,6 +2,7 @@ package com.dummy.states
 
 import com.dummy.contracts.ParentContract
 import com.dummy.contracts.ParentsSchemaV1
+import java.util.UUID
 import net.corda.core.contracts.BelongsToContract
 import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.identity.Party
@@ -39,9 +40,9 @@ class ParentState (
                 identifier = identifier.id,
                 childs = triggers.map {
                     ParentsSchemaV1.PersistentChild(
+                        id = UUID.randomUUID(),
                         name = it.first,
-                        type = it.second,
-                        parent = this
+                        type = it.second
                     )
                 }
             )

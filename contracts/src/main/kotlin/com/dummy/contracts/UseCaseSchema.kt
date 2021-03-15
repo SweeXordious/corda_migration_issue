@@ -1,15 +1,14 @@
 package com.dummy.contracts
 
-import com.dummy.states.ParentState
 import com.vladmihalcea.hibernate.type.array.ListArrayType
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.FetchType
+import javax.persistence.Id
 import javax.persistence.Index
 import javax.persistence.JoinColumn
 import javax.persistence.JoinColumns
-import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import net.corda.core.schemas.MappedSchema
 import net.corda.core.schemas.PersistentState
@@ -43,30 +42,30 @@ object ParentsSchemaV1 : MappedSchema(
         @Column(name = "identifier", nullable = false)
         val identifier: UUID,
 
+        @OneToMany(
+            cascade = [javax.persistence.CascadeType.PERSIST]
+        )
         @JoinColumns(
             JoinColumn(name = "transaction_id", referencedColumnName = "transaction_id"),
             JoinColumn(name = "output_index", referencedColumnName = "output_index")
         )
         var childs: List<PersistentChild>
 
-        ) : PersistentState()
+    ) : PersistentState()
 
     @Entity
     @Suppress("unused")
     @Table(name = "child_table")
     data class PersistentChild(
 
+        @Id
+        val id: UUID,
+
         @Column(name = "name", nullable = false)
         val name: String,
 
         @Column(name = "type", nullable = false)
-        val type: String,
+        val type: String
 
-        @ManyToOne(
-            targetEntity = PersistentParent::class,
-            fetch = FetchType.LAZY
-        )
-        var parent: ParentState
-
-    ) : PersistentState()
+    )
 }

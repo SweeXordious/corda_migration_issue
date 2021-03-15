@@ -1,0 +1,59 @@
+apply plugin: 'net.corda.plugins.cordapp'
+apply plugin: 'net.corda.plugins.quasar-utils'
+apply plugin: 'net.corda.plugins.cordformation'
+apply plugin: 'kotlin'
+
+cordapp {
+    targetPlatformVersion corda_platform_version.toInteger()
+    minimumPlatformVersion corda_platform_version.toInteger()
+    workflow {
+        name "Dummy CorDapp Flows"
+        vendor "Dummy"
+        licence "Apache License, Version 2.0"
+        versionId 1
+    }
+
+    signing {
+        enabled false
+    }
+}
+
+repositories {
+    maven {
+        url "http://repository.jboss.org/nexus/content/groups/public/"
+    }
+}
+
+dependencies {
+    // CorDapp dependencies.
+    cordapp project(":contracts")
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "com.rabbitmq.jms:rabbitmq-jms:$rabbitmq_jms_version"
+
+    // For testing
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
+    testCompile "org.testcontainers:rabbitmq:$testContainers_version"
+
+    // Corda dependencies.
+    cordaCompile "$corda_release_group:corda-core:$corda_release_version"
+
+    // Token SDK dependencies.
+//    cordapp "$tokens_release_group:tokens-money:$tokens_release_version"
+//    cordapp "$tokens_release_group:tokens-workflows:$tokens_release_version"
+
+    // Accounts dependencies
+    cordapp "$accounts_release_group:accounts-workflows:$accounts_release_version"
+    cordapp "$confidential_id_release_group:ci-workflows:$confidential_id_release_version"
+
+    // Business Network dependencies
+//    cordapp "$corda_bn_release_group:business-networks-workflows:$corda_bn_release_version"
+
+    //library to deal with JSON
+    implementation group: 'org.bitbucket.b_c', name: 'jose4j', version: '0.7.6'
+}
+
+jar {
+    archivesBaseName = "${rootProject.name}-workflows"
+}

@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset Vodafone.Corda.Generated:initial_schema_for_UseCaseContractsSchemaV1
+--changeset Dummy.Generated:initial_schema_for_ParentContractsSchemaV1
 
 CREATE TABLE parent_table
 (
@@ -15,9 +15,10 @@ CREATE TABLE child_table
 (
     output_index   INT         NOT NULL,
     transaction_id VARCHAR(64) NOT NULL,
+    id             UUID        NOT NULL,
     name           VARCHAR(64) NOT NULL,
     type           VARCHAR(64) NOT NULL,
-    PRIMARY KEY (output_index, transaction_id),
+    PRIMARY KEY (id),
     CONSTRAINT fk_child_table
         FOREIGN KEY (output_index, transaction_id)
             REFERENCES parent_table (output_index, transaction_id)

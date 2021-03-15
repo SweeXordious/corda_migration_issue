@@ -28,9 +28,7 @@ If another error occurs which says
 > Could not resolve all files for configuration ':runtime'.
 ```
 
-Then follow the steps from this
-commit: https://github.com/fifth9/vf-corda-dab/commit/543a22fcc9ba026e3511651c883847ed5d0b1a94 and make necessary
-changes and then execute the first command again.
+Then follow the steps and make necessary changes and then execute the first command again.
 
 Then run the nodes like this:
 
